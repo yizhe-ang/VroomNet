@@ -1,0 +1,25 @@
+{
+  "exp": {
+    "name": "resnet9_2_3e4"
+  },
+  "data_loader": {
+    "name": "data_loader.DataLoader",
+    "img_dim": 56
+  },
+  "model": {
+    "name": "res_net_model.ResNetModel",
+    "planes": [1, 1, 1, 1],
+    "filter_sizes": [32, 64, 128, 256],
+    "learning_rate": 0.0003,
+    "weights": "resnet9_2_3e4"
+  },
+  "trainer": {
+    "name": "trainer.ModelTrainer"
+  },
+  "evaluator": {
+    "name": "evaluator.Evaluator",
+    "data": "val"
+  },
+  "callbacks": {
+  }
+}

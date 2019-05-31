@@ -1,0 +1,22 @@
+{
+  "exp": {
+    "name": "vgg11"
+  },
+  "data_loader": {
+    "name": "data_loader.DataLoader",
+    "img_dim": 56
+  },
+  "model": {
+    "name": "res_net_model.ResNetModel",
+    "batch_norm": true,
+    "conv_cfg": [16, "M", 32, "M", 64, 64, "M", 128, 128, "M", 128, 128, "M"],
+    "fc_cfg": [1024, 1024, 1024],
+    "learning_rate": 0.0003,
+    "weights": "None"
+  },
+  "trainer": {
+    "name": "trainer.ModelTrainer"
+  },
+  "callbacks": {
+  }
+}

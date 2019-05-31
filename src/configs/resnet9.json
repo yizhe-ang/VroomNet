@@ -1,0 +1,23 @@
+{
+  "exp": {
+    "name": "resnet9_master"
+  },
+  "data_loader": {
+    "name": "data_loader.DataLoader",
+    "img_dim": 56
+  },
+  "model": {
+    "name": "res_net_9_model.ResNet9Model",
+    "learning_rate": 0.0003,
+    "weights": "None"
+  },
+  "trainer": {
+    "name": "trainer.ModelTrainer"
+  },
+  "evaluator": {
+    "name": "evaluator.Evaluator",
+    "data": "val"
+  },
+  "callbacks": {
+  }
+}
