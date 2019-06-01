@@ -1,8 +1,14 @@
 import os
 
 DATA_DIR = 'data'
-IMG_DIR = os.path.join(DATA_DIR, 'images')
-DATA_PATH = os.path.join(DATA_DIR, 'bounding_box_labels.csv')
+DATA_PATH = os.path.join(DATA_DIR, 'data.csv')
+LABELS_PATH = os.path.join(DATA_DIR, 'label_map.json')
+
+# Column names of data features
+IMG_COL = 'img_path'
+LABEL_COL = 'class'
+
+N_CLASSES = 196
 
 MODEL_DIR = 'models'
 MODEL_CSV_DIR = os.path.join(MODEL_DIR, 'model_csv')
