@@ -6,7 +6,7 @@ LABELS_PATH = os.path.join(DATA_DIR, 'label_map.json')
 
 # Column names of data features
 IMG_COL = 'img_path'
-LABEL_COL = 'class'
+CLASS_COL = 'class'
 
 N_CLASSES = 196
 
