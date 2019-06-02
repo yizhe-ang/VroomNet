@@ -1,6 +1,7 @@
 import os
 
-DATA_DIR = 'data'
+# DATA_DIR = 'data'
+DATA_DIR = '/floyd/input/data'
 DATA_PATH = os.path.join(DATA_DIR, 'data.csv')
 LABELS_PATH = os.path.join(DATA_DIR, 'label_map.json')
 
@@ -10,7 +11,7 @@ CLASS_COL = 'class'
 
 N_CLASSES = 196
 
-MODEL_DIR = 'models'
+MODEL_DIR = 'saved'
 MODEL_CSV_DIR = os.path.join(MODEL_DIR, 'model_csv')
 MODEL_LOGS_DIR = os.path.join(MODEL_DIR, 'model_logs')
 MODEL_WEIGHTS_DIR = os.path.join(MODEL_DIR, 'model_weights')

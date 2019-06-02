@@ -37,7 +37,7 @@ def main():
     )
 
     # Print model summary just as a sanity check
-    # model.model.summary()
+    model.model.summary()
 
     print('Start training the model.')
     history = trainer.train()

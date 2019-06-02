@@ -1,5 +1,10 @@
 data/
 
+floyd_requirements.txt
+.floydexpt
+.floydignore
+floyd.yml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,6 +1,6 @@
 {
   "exp": {
-    "name": "resnet50_pt"
+    "name": "resnet50_freeze"
   },
   "data_loader": {
     "name": "data_loader.DataLoader",
@@ -13,7 +13,8 @@
     "name": "resnet50_model.ResNet50Model",
     "ln_rate": 0.001,
     "freeze": true,
-    "weights": "imagenet"
+    "weights": "imagenet",
+    "optimizer": "adam"
   },
   "trainer": {
     "name": "trainer.Trainer",

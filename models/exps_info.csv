@@ -1,1 +1,0 @@
-exp_name,model,img_size,n_params,n_epochs,min_loss,max_acc,train_loss,train_acc,val_loss,val_acc,precision,recall,fscore,remarks
