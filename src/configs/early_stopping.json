@@ -19,7 +19,7 @@
   "trainer": {
     "name": "trainer.Trainer",
     "early_stopping": true,
-    "patience": 10,
+    "patience": 5,
     "n_epochs": 1000
   },
   "evaluator": {

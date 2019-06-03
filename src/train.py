@@ -44,3 +44,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# floyd run --gpu --data lemonwaffle/datasets/stanford-cars-processed/1:data --env tensorflow-1.13 "python -m src.train -c src/configs/early_stopping.json"

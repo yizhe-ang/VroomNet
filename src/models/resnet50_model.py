@@ -1,6 +1,6 @@
 import os
-from tensorflow.keras.applications.resnet50 import ResNet50
-from tensorflow.keras.layers import (
+from keras.applications.resnet50 import ResNet50
+from keras.layers import (
     Dense, Activation, Flatten, Dropout, BatchNormalization
 )
 from tensorflow.keras.models import Model

@@ -1,7 +1,33 @@
 """
-Contains any functions relating to evaluation and the Evaluator object (plotting, calculating statistics etc.)
+Module that contains any functions relating to evaluation and the
+Evaluator object (plotting, calculating statistics etc.)
 """
+import numpy as np
+from sklearn.metrics import precision_recall_fscore_support
+
 from src.utils import factory
+
+
+def eval_model(model, gen):
+    """Evaluates a model based on the validation/test data generator.
+
+    Args:
+        model (BaseModel): Model to evaluate.
+        gen (DataGenerator): Data generator to evaluate on.
+
+    Returns:
+        (precision, recall, fscore)
+    """
+    # Make sure generator is not shuffled?
+    y_true = gen.classes
+    predictions = model.predict_generator(gen)
+    y_pred = np.argmax(predictions, axis=1)
+
+    precision, recall, fscore, _ = \
+        precision_recall_fscore_support(y_true, y_pred, average='micro')
+
+    return precision, recall, fscore
+
 
 # Creates the Evaluator object from the JSON config file path.
 def create_evaluator(json_file):

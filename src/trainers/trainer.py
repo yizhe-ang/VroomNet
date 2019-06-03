@@ -10,6 +10,7 @@ from src.configs.constants import (
     MODEL_WEIGHTS_DIR, MODEL_LOGS_DIR, MODEL_CSV_DIR, EXPS_PATH
 )
 from src.base.base_trainer import BaseTrainer
+from src.evaluators.evaluation import eval_model
 
 
 class Trainer(BaseTrainer):
@@ -95,7 +96,11 @@ class Trainer(BaseTrainer):
         loss = history.history['loss']
         val_loss = history.history['val_loss']
 
-        precision, recall, fscore = self._eval_model()
+        # Compute metrics: precision, recall, fscore
+        precision, recall, fscore = eval_model(
+            self.model,
+            self.data_loader.get_val_gen(),
+        )
 
         with open(EXPS_PATH, mode='a') as exps:
             exps_writer = csv.writer(exps, delimiter=',')
@@ -105,7 +110,7 @@ class Trainer(BaseTrainer):
                 self.config.data_loader.img_size, # img_size
                 self.model.count_params(),        # n_params
                 len(val_loss) - PATIENCE,         # n_epochs
-                min(val_loss),                    # min_loss
+                min(loss),                        # min_loss
                 max(acc),                         # max_acc
                 loss[-(PATIENCE + 1)],            # train_loss
                 acc[-(PATIENCE + 1)],             # train_acc
@@ -116,19 +121,3 @@ class Trainer(BaseTrainer):
                 fscore,                           # fscore
                 '',                               # remarks
             ])
-
-
-    def _eval_model(self):
-        """Computes the precision, recall, and fscore of the model
-        at the end of training.
-        """
-        val_gen = self.data_loader.get_val_gen()
-        y_true = self.data_loader.get_val_labels()
-        predictions = self.model.predict_generator(val_gen)
-
-        y_pred = np.argmax(predictions, axis=1)
-
-        precision, recall, fscore, _ = \
-            precision_recall_fscore_support(y_true, y_pred, average='micro')
-
-        return precision, recall, fscore
