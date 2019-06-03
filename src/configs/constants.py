@@ -1,7 +1,7 @@
 import os
 
-# DATA_DIR = 'data'
-DATA_DIR = '/floyd/input/data'
+DATA_DIR = 'data'
+# DATA_DIR = '/floyd/input/data'
 DATA_PATH = os.path.join(DATA_DIR, 'data.csv')
 LABELS_PATH = os.path.join(DATA_DIR, 'label_map.json')
 
