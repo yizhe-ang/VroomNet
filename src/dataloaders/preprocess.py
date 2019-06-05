@@ -6,9 +6,6 @@ import json
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedShuffleSplit
-from tensorflow.keras.preprocessing.image import (
-    img_to_array, load_img
-)
 
 
 def get_indices_split(data, col, val_prop=0.3):

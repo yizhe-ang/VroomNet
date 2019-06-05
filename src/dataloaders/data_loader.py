@@ -1,6 +1,4 @@
 import pandas as pd
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications.resnet50 import preprocess_input
 
 from src.base.base_data_loader import BaseDataLoader
 from src.dataloaders.preprocess import get_indices_split
@@ -13,27 +11,10 @@ class DataLoader(BaseDataLoader):
         """
         super(DataLoader, self).__init__(config)
 
-        data = pd.read_csv(DATA_PATH)
 
-        # Retrieve classes from dataset
-        classes = list(data[CLASS_COL].unique())
 
-        # Separate Training and Test sets
-        test_data = data[data['test'] == 1]
-        training_data = data[data['test'] == 0]
-
-        # Generate Train and Valid sets
-        train_indices, val_indices = get_indices_split(training_data, CLASS_COL, 0.2)
-
-        # iloc!!!
-        val_data = training_data.iloc[val_indices]
-        train_data = training_data.iloc[train_indices]
-
-        # Initialize data generators, and the label maps
-        self._init_gens(classes, train_data, val_data, test_data)
-
-        # Save the validation labels for evaluation
-        self.val_labels = self.val_gen.classes
+        # Get stratified split indices
+        train_idx, val_idx = get_indices_split(df, CLASS_COL, 0.2)
 
 
     def get_train_gen(self):
