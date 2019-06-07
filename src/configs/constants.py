@@ -5,7 +5,8 @@ DATA_DIR = '/floyd/input/data'
 TRAIN_DF_NAME = 'train_labels.csv'
 TEST_DF_NAME = 'test_labels.csv'
 
-TEST_DIR = os.path.join(DATA_DIR, 'test')
+TRAIN_FOLDER = 'train'
+TEST_FOLDER = 'test'
 
 SAVED_DIR = 'saved'
 WEIGHTS_FOLDER = 'model_weights'

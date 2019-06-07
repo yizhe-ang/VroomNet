@@ -1,99 +1,69 @@
+"""Object that is responsible for the loading of data:
+    - Images from 'train/' folder
+    - Labels from 'train_labels.csv'
+"""
+import os
 import pandas as pd
 
-from src.base.base_data_loader import BaseDataLoader
+from fastai.vision import (
+    ImageList,
+    get_transforms, imagenet_stats,
+)
+
 from src.dataloaders.preprocess import get_indices_split
-from src.configs.constants import DATA_DIR, DATA_PATH, IMG_COL, CLASS_COL
+from src.configs.constants import (
+    IMG_COL, CLASS_COL,
+    DATA_DIR, TRAIN_DF_NAME, TRAIN_FOLDER
+)
 
 
-class DataLoader(BaseDataLoader):
-    def __init__(self, config):
-        """Initializes data splits and generators from the data file.
-        """
-        super(DataLoader, self).__init__(config)
-
-
-
+class DataLoader(object):
+    def __init__(self):
+        # Read in the training DataFrame
+        df = pd.read_csv(os.path.join(DATA_DIR, TRAIN_DF_NAME))
         # Get stratified split indices
         train_idx, val_idx = get_indices_split(df, CLASS_COL, 0.2)
 
+        # Initialize the augmentation/transformation function.
+        self._init_tfms()
 
-    def get_train_gen(self):
-        """Retrieves the data generator to be fed to a Keras model.fit_generator.
+        # Initialize the ImageList
+        # (source image data and labels before any transformations)
+        self.src = (ImageList
+            .from_csv(path=DATA_DIR,
+                      csv_name=TRAIN_DF_NAME,
+                      folder=TRAIN_FOLDER,
+                      cols=IMG_COL)
+            # Stratified split
+            .split_by_idxs(train_idx, val_idx)
+            # Get labels
+            .label_from_df(CLASS_COL))
 
-        Provides batches of images and its corresponding label.
+
+    def get_data_bunch(self, img_size=224, batch_size=32):
+        """Initializes the DataBunch to be fed into a Learner for training.
+        Defines any preprocessing and augmentations for the image data.
+
+        Args:
+            img_size (int): Resizes the image to (img_size, img_size).
+                Defaults to 224.
+            batch_size (int): Batch size. Defaults to 32.
+
+        Returns:
+            DataBunch:
         """
-        return self.train_gen
+        data = (self.src
+            .transform(self.tfms, size=img_size)
+            .databunch(bs=batch_size)
+            # Normalize as per imagenet stats for transfer learning
+            .normalize(imagenet_stats))
+
+        return data
 
 
-    def get_val_gen(self):
-        return self.val_gen
-
-
-    def get_test_gen(self):
-        return self.test_gen
-
-
-    def get_class_to_label(self):
-        return self.class_to_label
-
-
-    def get_label_to_class(self):
-        return self.label_to_class
-
-
-    def get_val_labels(self):
-        return self.val_labels
-
-
-    def _init_gens(self, classes, train_data, val_data, test_data):
-        """Initializes all the generators, i.e. train/val/test,
-        and also the label maps.
+    def _init_tfms(self):
+        """Initialize the augmentation/transformation function.
         """
-        IMG_SIZE = self.config.data_loader.img_size
-        BATCH_SIZE = self.config.data_loader.batch_size
-        VAL_BATCH_SIZE = self.config.data_loader.val_batch_size
-        TEST_BATCH_SIZE = self.config.data_loader.test_batch_size
+        tfms = get_transforms()
 
-        # Initialize ImageDataGenerators (also comprises augmentations)
-        # Utilize preprocessing function from ResNet50
-        train_img_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
-        val_img_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
-        test_img_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
-
-        self.train_gen = train_img_gen.flow_from_dataframe(
-            train_data,
-            directory=DATA_DIR,
-            x_col=IMG_COL,
-            y_col=CLASS_COL,
-            target_size=(IMG_SIZE, IMG_SIZE),
-            classes=classes,
-            class_mode='sparse',
-            batch_size=BATCH_SIZE,
-            shuffle=True,
-            seed=42
-        )
-        self.val_gen = val_img_gen.flow_from_dataframe(
-            val_data,
-            directory=DATA_DIR,
-            x_col=IMG_COL,
-            y_col=CLASS_COL,
-            target_size=(IMG_SIZE, IMG_SIZE),
-            classes=classes,
-            class_mode='sparse',
-            batch_size=VAL_BATCH_SIZE,
-            shuffle=False,
-        )
-        self.test_gen = test_img_gen.flow_from_dataframe(
-            test_data,
-            directory=DATA_DIR,
-            x_col=IMG_COL,
-            y_col=None,
-            target_size=(IMG_SIZE, IMG_SIZE),
-            class_mode=None,
-            batch_size=TEST_BATCH_SIZE,
-            shuffle=False
-        )
-
-        # Store label maps
-        self.class_to_label = self.train_gen.class_indices
-        self.label_to_class = dict((v,k) for k,v in self.class_to_label.items())
+        self.tfms = tfms
