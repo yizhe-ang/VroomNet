@@ -12,7 +12,7 @@ from fastai.callbacks.tracker import SaveModelCallback
 from fastai.vision import cnn_learner
 
 from src.configs.constants import (
-    SAVED_DIR, WEIGHTS_FOLDER, CSV_FOLDER
+    SAVED_DIR, WEIGHTS_FOLDER, CSV_FOLDER, TRAIN_LOG_PATH
 )
 
 
@@ -177,7 +177,7 @@ class Trainer(object):
         row['img_size'] = img_size
         row['remarks'] = ''
 
-        with open(EXPS_PATH, mode='a') as csv_file:
+        with open(TRAIN_LOG_PATH, mode='a') as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writerow(row)
 

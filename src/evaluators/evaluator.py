@@ -17,18 +17,23 @@ from fastai.basic_train import load_learner
 from fastai.vision import ImageList
 
 from src.configs.constants import (
-    SAVED_DIR, DATA_DIR, TEST_FOLDER, TEST_DF_NAME, IMG_COL, CLASS_COL
+    SAVED_DIR, DATA_DIR, TEST_FOLDER, TEST_DF_NAME, IMG_COL, CLASS_COL,
+    TEST_LOG_PATH
 )
 
 
 class Evaluator(object):
-    def __init__(self, learn_name, tta):
-        """
+    def __init__(self, learn_name, tta, exp_name):
+        """Logs test info to csv file after initialization.
+
         Args:
             learn_name (str): Name of the saved Learner file,
                 loads from f'saved/{learn_name}.pkl'
             tta (boolean): Whether to perform test time augmentation.
+            exp_name (str): Experiment name for logging.
         """
+        self.exp_name = exp_name
+
         # Initialize test ImageList
         test_imgs = ImageList.from_csv(
             path=DATA_DIR,
@@ -58,6 +63,12 @@ class Evaluator(object):
 
         # Extract predicted labels from probability scores
         self.y_pred = np.argmax(self.y_prob, axis=1)
+
+        # Compute metrics
+        self._init_metrics()
+
+        # Log test info
+        self._log_info()
 
 
     def get_classes(self):
@@ -90,22 +101,21 @@ class Evaluator(object):
         return self.y_pred
 
 
-    def compute_metrics(self):
-        """Evaluates the model on the data by computing metrics
-        like accuracy, precision, recall, fscore, etc.
-
+    def get_metrics(self):
+        """
         Returns:
             (accuracy, precision, recall, fscore)
         """
-        accuracy = accuracy_score(self.y_true, self.y_pred)
-        precision, recall, fscore, _ = \
+        return self.accuracy, self.precision, self.recall, self.fscore
+
+
+    def _init_metrics(self):
+        """Evaluates the model on the data by computing metrics
+        like accuracy, precision, recall, fscore, etc.
+        """
+        self.accuracy = accuracy_score(self.y_true, self.y_pred)
+        self.precision, self.recall, self.fscore, _ = \
             precision_recall_fscore_support(self.y_true, self.y_pred, average='micro')
-
-        return accuracy, precision, recall, fscore
-
-
-    def log_info(self):
-        pass
 
 
     def _init_labels(self):
@@ -114,3 +124,27 @@ class Evaluator(object):
         test_df = pd.read_csv(os.path.join(DATA_DIR, TEST_DF_NAME))
         y_true = test_df[CLASS_COL].values
         self.y_true = [self.classes.index(y) for y in y_true]
+
+
+    def _log_info(self):
+        fieldnames = [
+            'exp_name',
+            'accuracy',
+            'precision',
+            'recall',
+            'fscore',
+            'remarks',
+        ]
+
+        # Fill up information
+        row = {}
+        row['exp_name'] = self.exp_name
+        row['accuracy'] = self.accuracy
+        row['precision'] = self.precision
+        row['recall'] = self.recall
+        row['fscore'] = self.fscore
+        row['remarks'] = ''
+
+        with open(TEST_LOG_PATH, mode='a') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer.writerow(row)
