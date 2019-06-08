@@ -1,7 +1,7 @@
 import os
 
-# DATA_DIR = 'data'
-DATA_DIR = '/floyd/input/data'
+DATA_DIR = 'data'
+# DATA_DIR = '/floyd/input/data'
 TRAIN_DF_NAME = 'train_labels.csv'
 TEST_DF_NAME = 'test_labels.csv'
 

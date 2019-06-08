@@ -104,6 +104,10 @@ class Evaluator(object):
         return accuracy, precision, recall, fscore
 
 
+    def log_info(self):
+        pass
+
+
     def _init_labels(self):
         """Retrieve ground truth labels from the test dataframe.
         """
