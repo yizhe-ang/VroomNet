@@ -17,12 +17,13 @@ from src.configs.constants import (
 
 
 class Trainer(object):
-    def __init__(self, model, data_bunch, exp_name):
+    def __init__(self, model, data_bunch, mixup, exp_name):
         """
         Args:
             model: Model that makes up the backbone of our
                 classification model.
             data_bunch (DataBunch): Data to be trained on.
+            mixup (boolean): Whether to apply mixup augmentation.
             exp_name (str): Name of this training experiment.
         """
         self.exp_name = exp_name
@@ -33,10 +34,15 @@ class Trainer(object):
         self.learn = cnn_learner(
             data=data_bunch,
             base_arch=model,
+            pretrained=False,
             metrics=self.metrics,
             path=SAVED_DIR,
             model_dir=WEIGHTS_FOLDER
         )
+
+        # Apply mixup
+        if mixup:
+            self.learn = self.learn.mixup()
 
 
     def lr_find(self, freeze):
@@ -125,7 +131,7 @@ class Trainer(object):
         How does it record the losses?
         (i.e. across different training stages)
         """
-        self.learn.plot_losses()
+        self.learn.recorder.plot_losses()
 
 
     def set_data_bunch(self, data_bunch):

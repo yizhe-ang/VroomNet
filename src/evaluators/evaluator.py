@@ -7,6 +7,7 @@ Loads test data:
     - Labels from 'test_labels.csv'
 """
 import os
+import csv
 import numpy as np
 import pandas as pd
 
@@ -57,9 +58,9 @@ class Evaluator(object):
 
         # Get probability scores from model
         if tta:
-            self.y_prob, _ = self.learn.get_preds(ds_type=DatasetType.Test)
-        else:
             self.y_prob, _ = self.learn.TTA(ds_type=DatasetType.Test)
+        else:
+            self.y_prob, _ = self.learn.get_preds(ds_type=DatasetType.Test)
 
         # Extract predicted labels from probability scores
         self.y_pred = np.argmax(self.y_prob, axis=1)
