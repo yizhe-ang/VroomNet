@@ -8,16 +8,29 @@ Available SENet models:
 - SE-ResNeXt101_32x4d
 """
 import pretrainedmodels
+from fastai.vision.learner import model_meta
 
 
-def se_resnet50(pretrained=False):
-    pretrained = 'imagenet' if pretrained else None
-    model = pretrainedmodels.se_resnet(pretrained=pretrained)
+class SEResNeXt101(object):
+    def __init__(self):
+        # Wrap model for PyTorch API
+        def se_resnext101(pretrained=False):
+            pretrained = 'imagenet' if pretrained else None
+            model = pretrainedmodels.se_resnext101_32x4d(pretrained=pretrained)
 
-    return model
+            return model
 
-def senet_split(m):
-    return (m[0][3], m[1])
+        self.model = se_resnext101
 
-learn = cnn_learner(data_bunch, se_resnet50, pretrained=True,
-                    cut=-2, senet_split)
+        # Define splits and layer groups
+        meta = { 'cut': -2,
+                 'split': lambda m: (m[0][3], m[1]) }
+
+        # Update model meta
+        model_meta[se_resnext101] = meta
+
+
+    def get_model(self):
+        """Returns the model to be passed to a Learner.
+        """
+        return self.model

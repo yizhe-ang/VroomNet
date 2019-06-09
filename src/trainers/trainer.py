@@ -20,8 +20,7 @@ class Trainer(object):
     def __init__(self, model, data_bunch, mixup, exp_name):
         """
         Args:
-            model: Model that makes up the backbone of our
-                classification model.
+            model: Model function that will form the backbone of our model.
             data_bunch (DataBunch): Data to be trained on.
             mixup (boolean): Whether to apply mixup augmentation.
             exp_name (str): Name of this training experiment.
@@ -34,7 +33,6 @@ class Trainer(object):
         self.learn = cnn_learner(
             data=data_bunch,
             base_arch=model,
-            pretrained=False,
             metrics=self.metrics,
             path=SAVED_DIR,
             model_dir=WEIGHTS_FOLDER
