@@ -1,4 +1,3 @@
-"""Script to evaluate model and save model predictions.
-"""
+from src.evaluators.evaluator import Evaluator
 
-from src.evaluators.evaluation import eval_model
+evaluator = Evaluator()
