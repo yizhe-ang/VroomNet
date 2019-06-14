@@ -53,17 +53,17 @@ Here is a **TD;LR** of my final approach:
 **Model Architectures**  
 - ResNet50, ResNet101
 - SEResNeXt101
-- EfficientNet
+- InceptionNet
+- PNASNet
 
 **Optimization**  
 - Learning rate finder
 - One-cycle policy
-- What optimizer?
+- Adam optimizer 
 
 **Training Regime**  
 - Stage-1: Transfer learning, only train classifier head.
 - Stage-2: Fine-tune entire model, using discriminative layer training.
-- Stage-3: Fine-tune model from previous stage, by using images of increased size.
 
 **Post-processing**  
 - Test-time augmentation.
@@ -90,9 +90,32 @@ The [Squeeze-and-Excitation Network (SENet)]() is the winning architecture for I
 
 Roughly speaking, the SE Blocks improves performance by recalibrating the feature maps produced, through learning which features are most often activated together. For example, since mouths, noses and eyes frequently appear together in images, if the block sees that any two of these three features are strongly activated, it will act to increase the activation of the last feature map.
 
-#### EfficientNet
+#### Inception
+
+#### PNASNet 
 
 ### Optimization
-The training technique used is the [1cycle policy]() proposed by Leslie Smith and evangelized by Jeremy Howard in his [fast.ai course](). This learning rate scheduler recommends a cycle with two steps of equal lengths over the total number of epochs, climbing from a lower learning rate to a higher one, and then back again to the minimum. 
+The training technique adopted is the [1cycle policy]() proposed by Leslie Smith and evangelized by Jeremy Howard in his [fast.ai course](). This learning rate scheduler recommends a cycle with two steps of equal lengths over the total number of epochs, climbing from a lower learning rate to a higher one, and then back again to the minimum. 
+
+[insert learning rate curve here]
+
+The maximum learning rate value is chosen by performing a mock training session - gradually increasing the learning rate and plotting the losses after each iteration. The value that corresponds to the steepest slope on the loss curve, (somewhere before the minimum, where the loss is still improving) will be chosen.
+
+[insert learning rate finder curve here]
+
+The appeal behind that 1cycle policy is that it allows the model to converge to the same performance in a relatively lesser number of epochs.
+
+The [Adam]() optimizer is chosen by default. 
 
 ### Training Regime
+The de facto approach to obtain favourable results on your image classifier as quickly as possible is through transfer learning. The premise is simple: instead of starting from scratch, why not we grab a model already pretrained a large corpus of images as a starting point (the most accessible of which being [ImageNet]())? Of course, the more similar that image dataset is to your own problem task, the better. Even if your task is highly specific, transfer learning still works most of the time as it has been demonstrated that the earlier layers extract local, highly generic feature maps such as visual edges, colors, and textures. 
+
+Transfer learning will not only speed up training considerably, but will also require much less training images.
+
+In order to reuse a pretrained model and finetune it carefully, my training regime consists of two stages:
+
+#### Stage-1: Transfer Learning
+
+Selecting a model architecture with its weights already pretrained on the ImageNet dataset, the last few layers of the model are cut off to attach a custom classifier head for our problem task (i.e. 196 classes of cars instead of 1000 classes for ImageNet).
+
+[insert example architecture of transfer learning]

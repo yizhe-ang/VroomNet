@@ -6,8 +6,7 @@ import os
 import pandas as pd
 
 from fastai.vision import (
-    ImageList,
-    get_transforms, imagenet_stats,
+    ImageList, get_transforms,
 )
 
 from src.dataloaders.preprocess import get_indices_split
@@ -40,14 +39,14 @@ class DataLoader(object):
             .label_from_df(CLASS_COL))
 
 
-    def get_data_bunch(self, img_size=224, batch_size=32):
+    def get_data_bunch(self, img_size, img_stats, batch_size):
         """Initializes the DataBunch to be fed into a Learner for training.
         Defines any preprocessing and augmentations for the image data.
 
         Args:
             img_size (int): Resizes the image to (img_size, img_size).
-                Defaults to 224.
-            batch_size (int): Batch size. Defaults to 32.
+            img_stats (array): [mean, std] to normalize the input image.
+            batch_size (int): Batch size. 
 
         Returns:
             DataBunch:
@@ -56,7 +55,7 @@ class DataLoader(object):
             .transform(self.tfms, size=img_size)
             .databunch(bs=batch_size)
             # Normalize as per imagenet stats for transfer learning
-            .normalize(imagenet_stats))
+            .normalize(img_stats))
 
         return data
 
