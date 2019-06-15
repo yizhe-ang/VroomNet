@@ -70,8 +70,8 @@ def inceptionv4_model(pretrained=False):
     
 inceptionv4_config = {
     'base_arch': inceptionv4_model,
-    'cut'=-2, 
-    'split_on'=lambda m: (m[0][11], m[1])
+    'cut': -2, 
+    'split_on': lambda m: (m[0][11], m[1])
 }
 
 
