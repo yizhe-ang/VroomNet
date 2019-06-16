@@ -11,7 +11,7 @@ import csv
 import numpy as np
 import pandas as pd
 
-from sklearn.metrics import precision_recall_fscore_support
+# from sklearn.metrics import precision_recall_fscore_support
 from sklearn.metrics import accuracy_score
 from fastai.basic_data import DatasetType
 from fastai.basic_train import load_learner
@@ -107,7 +107,7 @@ class Evaluator(object):
         Returns:
             (accuracy, precision, recall, fscore)
         """
-        return self.accuracy, self.precision, self.recall, self.fscore
+        return self.accuracy 
 
 
     def _init_metrics(self):
@@ -115,8 +115,8 @@ class Evaluator(object):
         like accuracy, precision, recall, fscore, etc.
         """
         self.accuracy = accuracy_score(self.y_true, self.y_pred)
-        self.precision, self.recall, self.fscore, _ = \
-            precision_recall_fscore_support(self.y_true, self.y_pred, average='micro')
+        # self.precision, self.recall, self.fscore, _ = \
+        #     precision_recall_fscore_support(self.y_true, self.y_pred, average='micro')
 
 
     def _init_labels(self):
@@ -131,9 +131,9 @@ class Evaluator(object):
         fieldnames = [
             'exp_name',
             'accuracy',
-            'precision',
-            'recall',
-            'fscore',
+            # 'precision',
+            # 'recall',
+            # 'fscore',
             'remarks',
         ]
 
@@ -141,9 +141,9 @@ class Evaluator(object):
         row = {}
         row['exp_name'] = self.exp_name
         row['accuracy'] = self.accuracy
-        row['precision'] = self.precision
-        row['recall'] = self.recall
-        row['fscore'] = self.fscore
+        # row['precision'] = self.precision
+        # row['recall'] = self.recall
+        # row['fscore'] = self.fscore
         row['remarks'] = ''
 
         with open(TEST_LOG_PATH, mode='a') as csv_file:

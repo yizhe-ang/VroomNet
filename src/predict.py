@@ -1,13 +1,13 @@
 """Primary script to run that runs the model on the test dataset
 and saves the predictions.
 
-Make sure all images are in the 'data/test/' folder.
+Make sure all images are in the 'data/test' folder.
 Predictions will be saved in the root directory as a csv file.
-
-## Test whether the generated predictions match up with evaluation. ############
 """
+import os
 import argparse
 
+import numpy as np
 import pandas as pd
 from fastai.vision import ImageList
 from fastai.basic_data import DatasetType
@@ -19,7 +19,7 @@ from src.configs.constants import (
 from src.models.ensemble import Ensemble
 
 
-def main(ensemble, tta):
+def main(ensemble, tta, output):
     # Read in test data images from the 'test/' folder
     test_imgs = ImageList.from_folder(
         path=os.path.join(DATA_DIR, TEST_FOLDER),
@@ -29,7 +29,7 @@ def main(ensemble, tta):
     if ensemble:
         # Load ensemble of learners
         learners = []
-        learner_names = ['resnet50', 'se_resnext101']
+        learner_names = ['dpn92', 'inceptionv4', 'se_resnext101']
         for name in learner_names:
             learn = load_learner(
                 SAVED_DIR,
@@ -77,7 +77,7 @@ def main(ensemble, tta):
     df.insert(0, 'img_name', img_names)
 
     # Save predictions as csv file
-    df.to_csv('predictions.csv', index=False)
+    df.to_csv(output, index=False)
 
 
 if __name__ == '__main__':
@@ -85,12 +85,13 @@ if __name__ == '__main__':
         description="Performs model inference on test dataset."
     )
 
-    parser.add_argument('-output', 
-                        "help")
     parser.add_argument('-e', '--ensemble', action='store_true',
                         help='Whether to perform ensembling.')
     parser.add_argument('-t', '--tta', action='store_true',
                         help='Whether to perform test-time augmentation.')
+    parser.add_argument('-o', '--output', default='predictions.csv',
+                        help='Can choose to specify output path.')
+                        
     args = parser.parse_args()
 
-    main(args.ensemble, args.tta)
+    main(args.ensemble, args.tta, args.output)

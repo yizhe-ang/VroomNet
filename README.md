@@ -23,28 +23,37 @@ The latest versions of PyTorch and fastai,
 $ conda install -c pytorch -c fastai fastai
 ```
 
-And pretrained model implementations from [Cadene](https://github.com/Cadene/pretrained-models.pytorch) and [lukemelas](https://github.com/lukemelas/EfficientNet-PyTorch) if you wish to replicate my training results (not required for inference).
+And pretrained model implementations from [Cadene](https://github.com/Cadene/pretrained-models.pytorch) and if you wish to replicate my training results (not required for inference).
 
 ```
 $ pip install pretrainedmodels
-$ pip install efficientnet_pytorch
 ```
 
 ## Usage
 
 ### Download Trained Models
+Download all the models in this [Dropbox](https://www.dropbox.com/sh/xtvbx7vj8ru9401/AAALEcsMZBDhhQpzYH6aQf0wa?dl=0), and place them in the `saved` folder.
+
+```
+├───saved
+│   ├───dpn92.pkl
+│   ├───inceptionv4.pkl
+│   ├───se_resnext101.pkl
+```
 
 ### Inference
-To perform inference on a batch of images, simply place all your images in the `test` folder,
+To perform inference on a batch of images, simply place all your images in the `data/test` folder,
 
 ```
 ├───data
 │   ├───test    <- Here
-│   ├───train
 │   ├───...
 ```
 
 And run the `predict.py` script,
+
+```
+```
 
 ### Evaluation
 
