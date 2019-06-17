@@ -1,17 +1,17 @@
-"""Object that is responsible for model evaluation (and inference)
-on a test dataset.
+"""Class that is responsible for model evaluation on a test dataset.
 
 Takes in a saved Learner file.
 Loads test data:
-    - Images from 'test/' folder
-    - Labels from 'test_labels.csv'
+    - Images from 'data/test' folder
+    - Labels from 'data/test_labels.csv'
+    
+Once initialized, results will be logged to 'saved/test_info.csv'
 """
 import os
 import csv
+
 import numpy as np
 import pandas as pd
-
-# from sklearn.metrics import precision_recall_fscore_support
 from sklearn.metrics import accuracy_score
 from fastai.basic_data import DatasetType
 from fastai.basic_train import load_learner
@@ -25,7 +25,7 @@ from src.configs.constants import (
 
 class Evaluator(object):
     def __init__(self, learn_name, tta, exp_name):
-        """Logs test info to csv file after initialization.
+        """Logs test info to 'saved/test_info.csv' after initialization.
 
         Args:
             learn_name (str): Name of the saved Learner file,
@@ -74,8 +74,8 @@ class Evaluator(object):
 
     def get_classes(self):
         """Retrieve list of classes.
-        The integer label of the class can be retrieved by
-        self.get_classes.index(class)
+        The integer label of each class can be retrieved by
+        self.get_classes().index(class)
 
         Returns:
             list: of length 196.
@@ -87,7 +87,7 @@ class Evaluator(object):
         """Retrieve probability scores.
 
         Returns:
-            np.array of shape (n_images, n_classes)
+            np.array: of shape (n_images, n_classes)
                          i.e. (n_images, 196)
         """
         return self.y_prob
@@ -102,21 +102,18 @@ class Evaluator(object):
         return self.y_pred
 
 
-    def get_metrics(self):
+    def get_accuracy(self):
         """
         Returns:
-            (accuracy, precision, recall, fscore)
+            float: Accuracy score.
         """
         return self.accuracy 
 
 
     def _init_metrics(self):
-        """Evaluates the model on the data by computing metrics
-        like accuracy, precision, recall, fscore, etc.
+        """Evaluates the model on the data by computing metrics.
         """
         self.accuracy = accuracy_score(self.y_true, self.y_pred)
-        # self.precision, self.recall, self.fscore, _ = \
-        #     precision_recall_fscore_support(self.y_true, self.y_pred, average='micro')
 
 
     def _init_labels(self):
@@ -131,9 +128,6 @@ class Evaluator(object):
         fieldnames = [
             'exp_name',
             'accuracy',
-            # 'precision',
-            # 'recall',
-            # 'fscore',
             'remarks',
         ]
 
@@ -141,9 +135,6 @@ class Evaluator(object):
         row = {}
         row['exp_name'] = self.exp_name
         row['accuracy'] = self.accuracy
-        # row['precision'] = self.precision
-        # row['recall'] = self.recall
-        # row['fscore'] = self.fscore
         row['remarks'] = ''
 
         with open(TEST_LOG_PATH, mode='a') as csv_file:

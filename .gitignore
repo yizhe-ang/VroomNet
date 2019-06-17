@@ -1,24 +1,3 @@
-# root directory
-README.md
-report.md
-convert_mat_to_csv.py
-create_label_map.py
-
-saved/
-
-# data folder
-data/test
-data/train
-data/anno_test.csv
-data/anno_train.csv
-data/classes.csv
-data/labels.csv
-data/names.csv
-
-# notebooks folder
-notebooks/create_label_csv.ipynb
-notebooks/test.ipynb
-
 floyd_requirements.txt
 .floydexpt
 .floydignore

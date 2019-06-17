@@ -1,0 +1,18 @@
+{
+  "exp": {
+    "name": "dpn92"
+  },
+  "model": {
+    "name": "dpn92.DPN92"
+  },
+  "trainer": {
+    "batch_size": 50,
+    "lr_stage_1": 1e-2,
+    "n_epochs_stage_1": 30,
+    "lr_stage_2": [1e-5, 1e-3],
+    "n_epochs_stage_2": 20
+  },
+  "evaluator": {
+      "tta": true
+  }
+}

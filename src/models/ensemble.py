@@ -29,19 +29,20 @@ class Ensemble(object):
         # Get size of dataset
         n_x = len(self.learners[0].data.test_ds)
         # Get number of classes
-        n_classes = len(learn.data.classes)
+        n_classes = len(self.learners[0].data.classes)
 
         # Init prediction array
-        overall_preds = np.zeros(n_x, n_classes)
+        overall_preds = np.zeros((n_x, n_classes))
 
-        for learn in self.learners:
+        for i, learn in enumerate(self.learners):
+            print(f"Running model {i}...")
             # Get predictions
             if tta:
                 preds, _ = learn.TTA(ds_type=DatasetType.Test)
             else:
                 preds, _ = learn.get_preds(ds_type=DatasetType.Test)
             # Add to overall predictions
-            overall_preds += preds
+            overall_preds += np.array(preds)
 
         # Average probability scores
         return overall_preds / len(self.learners)

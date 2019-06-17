@@ -1,10 +1,10 @@
-"""Object that is responsible for the loading of data:
-    - Images from 'train/' folder
-    - Labels from 'train_labels.csv'
+"""Class that is responsible for the loading of data for training:
+    - Images from 'data/train' folder
+    - Labels from 'data/train_labels.csv'
 """
 import os
-import pandas as pd
 
+import pandas as pd
 from fastai.vision import (
     ImageList, get_transforms,
 )

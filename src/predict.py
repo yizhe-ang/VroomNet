@@ -20,7 +20,8 @@ from src.models.ensemble import Ensemble
 
 
 def main(ensemble, tta, output):
-    # Read in test data images from the 'test/' folder
+    # Read in test data images from the 'data/test' folder
+    print("Loading test data.")
     test_imgs = ImageList.from_folder(
         path=os.path.join(DATA_DIR, TEST_FOLDER),
     )
@@ -31,6 +32,7 @@ def main(ensemble, tta, output):
         learners = []
         learner_names = ['dpn92', 'inceptionv4', 'se_resnext101']
         for name in learner_names:
+            print(f"Loading {name}")
             learn = load_learner(
                 SAVED_DIR,
                 f'{name}.pkl',
@@ -39,10 +41,13 @@ def main(ensemble, tta, output):
             learners.append(learn)
 
         # Init ensemble
+        print("Initializing ensemble.")
         ensemble = Ensemble(learners)
 
         # Get predictions
+        print("Performing inference...")
         preds = ensemble.predict(tta)
+        print("Predictions done.")
 
         # Get classes list
         classes = learners[0].data.classes
@@ -53,6 +58,7 @@ def main(ensemble, tta, output):
         learner_name = 'se_resnext101'
 
         # Initialize Learner
+        print(f"Loading {learner_name}")
         learn = load_learner(
             SAVED_DIR,
             f'{learner_name}.pkl',
@@ -60,11 +66,13 @@ def main(ensemble, tta, output):
         )
 
         # Get predictions
+        print("Performing inference...")
         if tta:
             preds, _ = learn.TTA(ds_type=DatasetType.Test)
         else:
             preds, _ = learn.get_preds(ds_type=DatasetType.Test)
-
+        print("Predictions done.")
+        
         # Get classes list
         classes = learn.data.classes
         # Get image names list
@@ -78,6 +86,7 @@ def main(ensemble, tta, output):
 
     # Save predictions as csv file
     df.to_csv(output, index=False)
+    print(f"Predictions saved to {output}")
 
 
 if __name__ == '__main__':

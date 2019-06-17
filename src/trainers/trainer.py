@@ -4,8 +4,8 @@ Takes in a model and a DataBunch, and initializes a Learner.
 """
 import os
 import csv
-import pandas as pd
 
+import pandas as pd
 from fastai.metrics import accuracy
 from fastai.callbacks.csv_logger import CSVLogger
 from fastai.callbacks.tracker import SaveModelCallback
@@ -23,7 +23,7 @@ class Trainer(object):
             data_bunch (DataBunch): Data to be trained on.
             mixup (boolean): Whether to apply mixup augmentation.
             exp_name (str): Name of this training experiment.
-            model_config (dict): Model configuration.
+            model_config (dict): Model configuration dictionary.
         """
         self.exp_name = exp_name
         # Initalize metrics
@@ -141,6 +141,7 @@ class Trainer(object):
 
     def export(self):
         """Exports the Learner, to then be used for inference/evaluation.
+        Will be saved in f'saved/{exp_name}.pkl'
         """
         self.learn.export(f'{self.exp_name}.pkl')
 

@@ -1,3 +1,7 @@
+"""Constants, typically file and folder paths that are shared throughout
+the project.
+"""
+
 import os
 
 DATA_DIR = 'data'

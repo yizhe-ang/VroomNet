@@ -1,18 +1,18 @@
 """
-Module that contains any functions relating to preprocessing, data loading,
-and the loading and manipulation of images.
+Module that contains any functions relating to data preprocessing and data loading.
 """
 from sklearn.model_selection import StratifiedShuffleSplit
 
 
 def get_indices_split(data, col, val_prop=0.3):
     """Creates the indices for Train/Val split on given dataset.
-    Performs stratified split based on specified feature proportion
+    Performs stratified split based on specified feature. 
     (with random seed set).
 
     Args:
         data (pd.DataFrame):
         col (str): The feature/label to stratify on.
+        val_prop (float): Proportion to go to validation set.
 
     Returns:
         (train_indices, val_indices),
