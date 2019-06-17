@@ -217,6 +217,7 @@ All model experiments share these same hyperparameter values.
 | Stage-2 Epochs        | 20            |
 | Stage-1 Learning Rate | 1e-2          |
 | Stage-2 Learning Rate | (1e-5, 1e-3)* |
+
 _*First value corresponds to learning rate for earlier layers, and second value corresponds to learning rate for the later layers._
 
 Remaining specific values for different model experiments.
