@@ -6,7 +6,6 @@ Image Classification Model for the [Stanford Cars Dataset](https://ai.stanford.e
 
 <!-- TOC -->
 
-- [Table of Contents](#table-of-contents)
 - [Results](#results)
 - [Requirements](#requirements)
 - [Usage](#usage)
