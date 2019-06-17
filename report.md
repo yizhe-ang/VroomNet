@@ -89,7 +89,7 @@ Here is a **TD;LR** of my final approach:
 - Ensembled using soft voting of classification scores.
 
 ### 2. Data Preprocessing
-My data preprocessing primarily comprises steps required to feed my images into a model pretrained using the [ImageNet](www.image-net.org) dataset, namely by resizing the images to 224 x 224 or 299 x 299, and the normalizing of pixel values using the ImageNet dataset statistics.
+My data preprocessing primarily comprises steps required to feed my images into a model pretrained using the [ImageNet](https://www.image-net.org) dataset, namely by resizing the images to 224 x 224 or 299 x 299, and the normalizing of pixel values using the ImageNet dataset statistics.
 
 Data augmentation is carried out to artificially increase the size of the dataset and to act as a regularization technique. It works by performing random transformations (flips, rotations, zooms, lighting, etc.) to generate many more realistic variants of each training image  - the images fed into the model should still look like what the model would encounter during deployment. For example, an image of a car flipped horizontally is still a car, but an image of a car flipped vertically probably won't be a very useful training instance for the model; save for identifying overturned cars during accidents.
 
